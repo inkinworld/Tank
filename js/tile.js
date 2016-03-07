@@ -17,6 +17,12 @@ function Tile(x,y,rota,direction,frame){
 	this.frame = [];
 	this.frame.push(new Sprite(tileImg,1120,0,32,32));
 
+
+	this.graph = {
+		width: Style.tank,
+		height: Style.tank,
+	}
+
 	this.draw = function(ctx){
 		this.frame[this.state.frame].draw(ctx,this.state.x,this.state.y,Style.title,Style.title,this.state.rota);
 	}
