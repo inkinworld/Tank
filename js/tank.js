@@ -1,16 +1,18 @@
 var Tanks = {};
-var tankImg = new Image();
-function MyTank(){
+// 坦克素材图片，在load模块加载；
+var tankImg;
+
+function MyTank(x,y,rota,direction,frame){
 	this.state = {
-		x : 0,
-		y : 0,
-		rota : 0,
+		x : x,
+		y : y,
+		rota : rota,
 		// 0 --> up
 		// 1 --> right
 		// 2 --> down
 		// 3 --> left 
-		direction : 0,
-		frame : 0
+		direction : direction,
+		frame : frame
 	}
 
 	this.moveState = {
@@ -23,8 +25,9 @@ function MyTank(){
 
 	this.frame = [];
 	this.frame.push(new Sprite(tankImg,0,0,32,32));
-	this.frame.push(new Sprite(tankImg,448,0,32,32))
-	this.draw = function(){
+	this.frame.push(new Sprite(tankImg,448,0,32,32));
+
+	this.draw = function(ctx){
 		this.frame[this.state.frame].draw(ctx,this.state.x,this.state.y,Style.tank,Style.tank,this.state.rota);
 	}
 
@@ -71,10 +74,8 @@ function MyTank(){
 			that.moveState.d = 0;
 		})
 	}
-}
 
-
-function TankDraw(frames){
+	this.update = function(frames){
 		var state = Tanks.myTank.state,
 			moveState = Tanks.myTank.moveState;
 		moveState.isMove = moveState.w || moveState.a || moveState.s || moveState.d;
@@ -95,5 +96,5 @@ function TankDraw(frames){
 					break;
 			}
 		} 
-		Tanks.myTank.draw();
+	}
 }
