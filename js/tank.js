@@ -92,25 +92,41 @@ function MyTank(x,y,rota,direction,frame){
 				case 0:
 					state.y -= Style.tankSpeed;
 					correct(0);
-					// 修正与砖块重叠
-					if( Collision.isColl(that,tileList).isColl) state.y = tileList.state.y + (tileList.graph.height);
 					break;
 				case 1:
 					state.x += Style.tankSpeed;
 					correct(1);
-					if( Collision.isColl(that,tileList).isColl) state.x = tileList.state.x - (tileList.graph.height);
 					break;
 				case 2:
 					state.y += Style.tankSpeed;
-					if( Collision.isColl(that,tileList).isColl) state.y = tileList.state.y - (tileList.graph.height);
 					correct(0);
 					break;
 				case 3:
 					state.x -= Style.tankSpeed;
-					if( Collision.isColl(that,tileList).isColl) state.x = tileList.state.x + (tileList.graph.height);
 					correct(1);
 					break;
 			}
+
+			tileList.forEach(function(ele){
+				if( Collision.isColl(that,ele).isColl){
+					switch(Tanks.myTank.state.direction){
+						case 0:
+							state.y = ele.state.y + (ele.graph.height);
+							break;
+						case 1:
+							state.x = ele.state.x - (ele.graph.height);
+							break;
+						case 2:
+							state.y = ele.state.y - (ele.graph.height);
+							break;
+						case 3:
+							state.x = ele.state.x + (ele.graph.height);
+							break;
+					}
+					return;
+				}
+			})
+			// 修正超出画布
 			if(state.x < Style.tank/2) state.x = Style.tank/2;
 			if(state.x > Style.canvas-32) state.x = Style.canvas-32;
 			if(state.y < Style.tank/2) state.y = Style.tank/2;
@@ -118,7 +134,6 @@ function MyTank(x,y,rota,direction,frame){
 		} 
 		// 修正运动
 		function correct(type){
-			// 修正超出画布
 			switch(type){
 				case 0:
 					state.x = Math.round(state.x / (Style.tank / 2)) * (Style.tank/2);
@@ -128,6 +143,8 @@ function MyTank(x,y,rota,direction,frame){
 					break;
 			}
 		}
+
+
 	}
 
 }
