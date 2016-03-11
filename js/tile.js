@@ -22,7 +22,8 @@ function Tile(x,y,rota,direction,frame){
 		width: Style.tank,
 		height: Style.tank,
 	}
-	//	 一块大砖块的最小构成单位为16个小方块
+	//	 一块 [大砖块] 由四个 [小砖块] 构成（L1,R1,L2,R2）,
+	//   每个 [小砖块] 由四个 [小方块] 小方块（0,1,2,3）构成
 	//	为了碰撞检测的效率，原版游戏将16个小方块分为四组，每四个小方块共用一个碰撞体积
 	// 	coll.state 		0 --> 地砖已损毁，无碰撞体积
 	//	      	   		1 --> 地砖存在， 有碰撞体积
@@ -92,6 +93,17 @@ function Tile(x,y,rota,direction,frame){
 		// console.log(list);
 		return list;
 
+	}
+
+	this.update = function(){
+		var that = this;
+		var quenue = ['L1','R1','L2','R2'];
+		quenue.forEach(function(ele){
+			var ele = that.coll[ele];
+			var list = ele.list;
+			if( !(list[0] || list[1] || list[2] || list[3]) )
+				ele.collState = 0;
+		})
 	}
 
 	this.draw = function(ctx){
