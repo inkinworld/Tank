@@ -1,5 +1,5 @@
 var load = (function(){
-	var imageNum = 2;
+	var imageNum = 3;
 	return function(src){
 		var image = new Image();
 		image.src = src;
@@ -12,7 +12,8 @@ var load = (function(){
 	}
 })()
 
-var tankImg = load("./source/Tank.png");
-var tileImg = load( "./source/tile.png");
+tankImg = load("./source/Tank.png");
+tileImg = load("./source/tile.png");
+miscImg = load("./source/Misc.png");
 // var tankImg;
 // var tileImg;
