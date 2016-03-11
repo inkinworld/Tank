@@ -14,8 +14,8 @@ Collision.isColl = function(a,b){
 
 	return {
 		position: {
-			X: positionX,
-			Y: positionY
+			dx: dx,
+			dy: dy
 		},
 		isColl: coll, 
 	}
