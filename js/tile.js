@@ -75,6 +75,7 @@ function Tile(x,y,rota,direction,frame){
 			var item = that.coll[ele];
 			if(item.collState){
 				var result = {
+					tile: item,
 					state:{
 						x: (index%2)? that.state.x + Style.tank/4 : that.state.x - Style.tank/4,
 						y: (index < 2)? that.state.y - Style.tank/4 : that.state.y + Style.tank/4
