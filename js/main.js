@@ -3,7 +3,7 @@ var ctx,
 
 function main(){
 	ctx = document.getElementById('canvas').getContext('2d');
-	Tanks.myTank = new MyTank(32,32,0,0,0);
+	Tanks.myTank = new MyTank(96,32,0,0,0);
 	Tanks.myTank.keyBoard();
 	t1 = new Tile(32,32,0,0,0);
 	t2 = new Tile(320,384,0,0,0);
@@ -12,15 +12,25 @@ function main(){
 	t = [];
 	t.push(t1);
 	t.push(t2);
-	t.push(t3);
+	// t.push(t3);
 	t.push(t4);
 	var iframes = 0;
 	function draw(){
 		iframes = (iframes + 1)%60;
+
 		ctx.fillRect(0,0,Style.canvas,Style.canvas);
-		t.forEach(function(ele){
+
+		Bullets.list.forEach(function(ele){
+			ele.update(t);
 			ele.draw(ctx);
 		})
+
+		t.forEach(function(ele){
+			ele.update();
+			ele.draw(ctx);
+		})
+
+		BulletsClear();
 		Tanks.myTank.update(iframes,t);
 		Tanks.myTank.draw(ctx);
 		// console.log(Collision.isColl(Tanks.myTank,Tiles.test).isColl)
