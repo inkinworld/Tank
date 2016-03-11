@@ -33,8 +33,8 @@ function Bullet(x,y,rota,direction,frame){
 	}
 
 	this.graph = {
-		width: Style.bullet,
-		height: Style.bullet
+		width: Style.bullet/2,
+		height: Style.bullet/2
 	}
 
 	this.exist = 1;
@@ -71,43 +71,152 @@ function Bullet(x,y,rota,direction,frame){
 						var item = ele.tile;
 						switch(state.direction){
 							case 0:
-								if(item.complete){
-									item.list = [1,1,0,0];
-									item.complete = 0;
+								if(collResult.position.dx < 0 ){
+									//射中小砖块的左侧区域
+									if( collResult.position.dy > (Style.bullet/2) ){
+										// console.log(collResult.position.dy);
+										//射中小砖块的左下角区域，[小方块][2]
+										if(item.list[2]){
+											//小砖块的左下角( [小方块][2] )存在，摧毁小砖块的左下角和右下角
+											item.list[2] = 0;
+											item.list[3] = 0;
+											that.exist = 0;
+										}
+										//否则无影响
+									}else{
+										//射中小砖块的左上角区域, [小方块][0]
+										if(item.list[0]){
+											//小砖块的左上角( [小方块][0] )存在，摧毁小砖块的左上角和右上角
+											item.list[0] = 0;
+											item.list[1] = 0;
+											that.exist = 0;
+										}
+										//否则无影响
+									}
 								}else{
-									item.list = [0,0,0,0];
-									item.collState = 0;
+									//射中小砖块的右侧
+									if( collResult.position.dy > (Style.bullet/2) ){
+										//射中小砖块的右下角区域，[小方块][3]
+										if(item.list[3]){
+											//小砖块的右下角( [小方块][2] )存在，摧毁小砖块的左下角和右下角
+											item.list[2] = 0;
+											item.list[3] = 0;
+											that.exist = 0;
+										}
+										//否则无影响
+									}else{
+										//射中小砖块的右上角区域, [小方块][1]
+										if(item.list[1]){
+											//小砖块的左上角( [小方块][1] )存在，摧毁小砖块的左上角和右上角
+											item.list[0] = 0;
+											item.list[1] = 0;
+											that.exist = 0;
+										}
+										//否则无影响
+									}
 								}
+								item.complete = 0;
 								break;
 							case 1:
-								if(item.complete){
-									item.list = [0,1,0,1];
-									item.complete = 0;
+								if(collResult.position.dy < 0 ){
+									//射中小砖块的上侧区域
+									if( collResult.position.dx < -(Style.bullet/2) ){
+										if(item.list[0]){
+											item.list[0] = 0;
+											item.list[2] = 0;
+											that.exist = 0;
+										}
+									}else{
+										if(item.list[1]){
+											item.list[1] = 0;
+											item.list[3] = 0;
+											that.exist = 0;
+										}
+									}
 								}else{
-									item.list = [0,0,0,0];
-									item.collState = 0;
+									if( collResult.position.dx < -(Style.bullet/2) ){
+										if(item.list[2]){
+											item.list[0] = 0;
+											item.list[2] = 0;
+											that.exist = 0;
+										}
+									}else{
+										if(item.list[3]){
+											item.list[1] = 0;
+											item.list[3] = 0;
+											that.exist = 0;
+										}
+									}
 								}
+								item.complete = 0;
 								break;
 							case 2:
-								if(item.complete){
-									item.list = [0,0,1,1];
-									item.complete = 0;
+								if(collResult.position.dx < 0 ){
+									//射中小砖块的左侧区域
+									if( collResult.position.dy < -(Style.bullet/2) ){
+										if(item.list[0]){
+											item.list[0] = 0;
+											item.list[1] = 0;
+											that.exist = 0;
+										}
+									}else{
+										if(item.list[2]){
+											item.list[2] = 0;
+											item.list[3] = 0;
+											that.exist = 0;
+										}
+									}
 								}else{
-									item.list = [0,0,0,0];
-									item.collState = 0;
+									if( collResult.position.dy < -(Style.bullet/2) ){
+										if(item.list[1]){
+											item.list[1] = 0;
+											item.list[0] = 0;
+											that.exist = 0;
+										}
+									}else{
+										if(item.list[3]){
+											item.list[3] = 0;
+											item.list[2] = 0;
+											that.exist = 0;
+										}
+									}
 								}
+								item.complete = 0;
 								break;
 							case 3:
-								if(item.complete){
-									item.list = [1,0,1,0];
-									item.complete = 0;
+								if(collResult.position.dy < 0 ){
+									//射中小砖块的上侧区域
+									if( collResult.position.dx > (Style.bullet/2) ){
+										if(item.list[1]){
+											item.list[1] = 0;
+											item.list[3] = 0;
+											that.exist = 0;
+										}
+									}else{
+										if(item.list[0]){
+											item.list[0] = 0;
+											item.list[2] = 0;
+											that.exist = 0;
+										}
+									}
 								}else{
-									item.list = [0,0,0,0];
-									item.collState = 0;
+									if( collResult.position.dx > (Style.bullet/2) ){
+										if(item.list[3]){
+											item.list[1] = 0;
+											item.list[3] = 0;
+											that.exist = 0;
+										}
+									}else{
+										if(item.list[2]){
+											item.list[0] = 0;
+											item.list[2] = 0;
+											that.exist = 0;
+										}
+									}
 								}
+								item.complete = 0;
 								break;
 						}
-						that.exist = 0;
 					}
 				})
 			// switch(Tanks.myTank.state.direction){
