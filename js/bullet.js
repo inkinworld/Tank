@@ -8,10 +8,14 @@ function BulletsClear(){
 	})
 	Bullets.list = newList;
 }
+
 // 子弹图片load模块
 var miscImg;
 
+Bullet.prototype = new Sprite(Style.bullet ,Style.bullet ,Style.bullet/2 ,Style.bullet/2);
+
 function Bullet(x,y,rota,direction,frame){
+	this.addFrame(miscImg,0,0,8,8);
 	this.state = {
 		x : x,
 		y : y,
@@ -32,14 +36,7 @@ function Bullet(x,y,rota,direction,frame){
 		isMove: false
 	}
 
-	this.graph = {
-		width: Style.bullet/2,
-		height: Style.bullet/2
-	}
-
 	this.exist = 1;
-	this.frame = [];
-	this.frame.push(new Sprite(miscImg,0,0,8,8));
 	
 	this.update = function(tileList){
 		var that =this;
@@ -66,6 +63,7 @@ function Bullet(x,y,rota,direction,frame){
 				childList = ele.createChildColl();
 				if(!childList.length) return;
 				childList.forEach(function(ele){
+					var isBoom = false;
 					var collResult = Collision.isColl(that,ele);
 					if(collResult.isColl){
 						var item = ele.tile;
@@ -73,35 +71,39 @@ function Bullet(x,y,rota,direction,frame){
 							case 0:
 								if(collResult.position.dx < 0 ){
 									//射中小砖块的左侧区域
-									if( collResult.position.dy > (Style.bullet/2) ){
-										// console.log(collResult.position.dy);
+									if( collResult.position.dy >= (Style.bullet/2) ){
+										// console.log( collResult.position.dy );
 										//射中小砖块的左下角区域，[小方块][2]
 										if(item.list[2]){
 											//小砖块的左下角( [小方块][2] )存在，摧毁小砖块的左下角和右下角
 											item.list[2] = 0;
 											item.list[3] = 0;
 											that.exist = 0;
+											isBoom = true;
 										}
 										//否则无影响
 									}else{
 										//射中小砖块的左上角区域, [小方块][0]
+										console.log( collResult.position.dy );
 										if(item.list[0]){
 											//小砖块的左上角( [小方块][0] )存在，摧毁小砖块的左上角和右上角
 											item.list[0] = 0;
 											item.list[1] = 0;
 											that.exist = 0;
+											isBoom = true;
 										}
 										//否则无影响
 									}
 								}else{
 									//射中小砖块的右侧
-									if( collResult.position.dy > (Style.bullet/2) ){
+									if( collResult.position.dy >= (Style.bullet/2) ){
 										//射中小砖块的右下角区域，[小方块][3]
 										if(item.list[3]){
 											//小砖块的右下角( [小方块][2] )存在，摧毁小砖块的左下角和右下角
 											item.list[2] = 0;
 											item.list[3] = 0;
 											that.exist = 0;
+											isBoom = true;
 										}
 										//否则无影响
 									}else{
@@ -111,6 +113,7 @@ function Bullet(x,y,rota,direction,frame){
 											item.list[0] = 0;
 											item.list[1] = 0;
 											that.exist = 0;
+											isBoom = true;
 										}
 										//否则无影响
 									}
@@ -120,31 +123,35 @@ function Bullet(x,y,rota,direction,frame){
 							case 1:
 								if(collResult.position.dy < 0 ){
 									//射中小砖块的上侧区域
-									if( collResult.position.dx < -(Style.bullet/2) ){
+									if( collResult.position.dx <= -(Style.bullet/2) ){
 										if(item.list[0]){
 											item.list[0] = 0;
 											item.list[2] = 0;
 											that.exist = 0;
+											isBoom = true;
 										}
 									}else{
 										if(item.list[1]){
 											item.list[1] = 0;
 											item.list[3] = 0;
 											that.exist = 0;
+											isBoom = true;
 										}
 									}
 								}else{
-									if( collResult.position.dx < -(Style.bullet/2) ){
+									if( collResult.position.dx <= -(Style.bullet/2) ){
 										if(item.list[2]){
 											item.list[0] = 0;
 											item.list[2] = 0;
 											that.exist = 0;
+											isBoom = true;
 										}
 									}else{
 										if(item.list[3]){
 											item.list[1] = 0;
 											item.list[3] = 0;
 											that.exist = 0;
+											isBoom = true;
 										}
 									}
 								}
@@ -153,31 +160,35 @@ function Bullet(x,y,rota,direction,frame){
 							case 2:
 								if(collResult.position.dx < 0 ){
 									//射中小砖块的左侧区域
-									if( collResult.position.dy < -(Style.bullet/2) ){
+									if( collResult.position.dy <= -(Style.bullet/2) ){
 										if(item.list[0]){
 											item.list[0] = 0;
 											item.list[1] = 0;
 											that.exist = 0;
+											isBoom = true;
 										}
 									}else{
 										if(item.list[2]){
 											item.list[2] = 0;
 											item.list[3] = 0;
 											that.exist = 0;
+											isBoom = true;
 										}
 									}
 								}else{
-									if( collResult.position.dy < -(Style.bullet/2) ){
+									if( collResult.position.dy <= -(Style.bullet/2) ){
 										if(item.list[1]){
 											item.list[1] = 0;
 											item.list[0] = 0;
 											that.exist = 0;
+											isBoom = true;
 										}
 									}else{
 										if(item.list[3]){
 											item.list[3] = 0;
 											item.list[2] = 0;
 											that.exist = 0;
+											isBoom = true;
 										}
 									}
 								}
@@ -186,37 +197,42 @@ function Bullet(x,y,rota,direction,frame){
 							case 3:
 								if(collResult.position.dy < 0 ){
 									//射中小砖块的上侧区域
-									if( collResult.position.dx > (Style.bullet/2) ){
+									if( collResult.position.dx >= (Style.bullet/2) ){
 										if(item.list[1]){
 											item.list[1] = 0;
 											item.list[3] = 0;
 											that.exist = 0;
+											isBoom = true;
 										}
 									}else{
 										if(item.list[0]){
 											item.list[0] = 0;
 											item.list[2] = 0;
 											that.exist = 0;
+											isBoom = true;
 										}
 									}
 								}else{
-									if( collResult.position.dx > (Style.bullet/2) ){
+									if( collResult.position.dx >= (Style.bullet/2) ){
 										if(item.list[3]){
 											item.list[1] = 0;
 											item.list[3] = 0;
 											that.exist = 0;
+											isBoom = true;
 										}
 									}else{
 										if(item.list[2]){
 											item.list[0] = 0;
 											item.list[2] = 0;
 											that.exist = 0;
+											isBoom = true;
 										}
 									}
 								}
 								item.complete = 0;
 								break;
 						}
+						if(isBoom) Booms.list.push(new Boom(that.state.x,that.state.y,0,0,0))	
 					}
 				})
 			// switch(Tanks.myTank.state.direction){
@@ -237,14 +253,8 @@ function Bullet(x,y,rota,direction,frame){
 		}
 	})
 
-
-
-		if((state.x < Style.bullet/2) || (state.x > Style.canvas-Style.bullet/2) || (state.y < Style.bullet/2) || (state.y > Style.canvas-Style.bullet/2) ) 
+	if((state.x < Style.bullet/2) || (state.x > Style.canvas-Style.bullet/2) || (state.y < Style.bullet/2) || (state.y > Style.canvas-Style.bullet/2) ) 
 			this.exist = 0;
-
-	}
-	this.draw = function(ctx){
-		this.frame[this.state.frame].draw(ctx,this.state.x,this.state.y,Style.bullet,Style.bullet,this.state.rota);
 	}
 
 }

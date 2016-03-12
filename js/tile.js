@@ -1,7 +1,9 @@
 var Tiles = {};
+Tiles.list = [];
 // 地砖素材图片，在load模块中加载；；
 var tileImg;
 
+Tile.prototype = new Sprite(Style.tile ,Style.tile ,Style.tile ,Style.tile);
 function Tile(x,y,rota,direction,frame){
 	this.state = {
 		x : x,
@@ -14,14 +16,9 @@ function Tile(x,y,rota,direction,frame){
 		direction : direction,
 		frame : frame
 		}
-	this.frame = [];
-	this.frame.push(new Sprite(tileImg,1120,0,32,32));
 
+	this.addFrame(tileImg,1120,0,32,32);
 
-	this.graph = {
-		width: Style.tank,
-		height: Style.tank,
-	}
 	//	 一块 [大砖块] 由四个 [小砖块] 构成（L1,R1,L2,R2）,
 	//   每个 [小砖块] 由四个 [小方块] 小方块（0,1,2,3）构成
 	//	为了碰撞检测的效率，原版游戏将16个小方块分为四组，每四个小方块共用一个碰撞体积
@@ -81,7 +78,7 @@ function Tile(x,y,rota,direction,frame){
 						x: (index%2)? that.state.x + Style.tank/4 : that.state.x - Style.tank/4,
 						y: (index < 2)? that.state.y - Style.tank/4 : that.state.y + Style.tank/4
 					},
-					graph:{
+					volume:{
 						width: Style.tank/2,
 						height: Style.tank/2
 					}
@@ -106,12 +103,7 @@ function Tile(x,y,rota,direction,frame){
 		})
 	}
 
-	this.draw = function(ctx){
-		this.frame[this.state.frame].draw(ctx,this.state.x,this.state.y,Style.title,Style.title,this.state.rota);
-		this.drawDestory(ctx);
-	}
-
-	// 损毁的地砖处理
+	// 损毁的地砖绘制
 	this.drawDestory =function(ctx){
 		var that = this;
 		var quenue = ['L1','R1','L2','R2'];
