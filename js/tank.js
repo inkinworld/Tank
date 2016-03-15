@@ -1,4 +1,5 @@
 var Tanks = {};
+Tanks.list = [];
 // 坦克素材图片，在load模块加载；
 var tankImg;
 Tank.prototype = new Sprite(Style.tank ,Style.tank ,Style.tank ,Style.tank);
@@ -22,12 +23,32 @@ function Tank(){
 		d: 0,
 		isMove: false
 	}
+	this.fire = function(){
+		switch(this.state.direction){
+			case 0:
+				Bullets.list.push(new Bullet(this.state.x,this.state.y - Style.tank/2,0,0,0));
+				break;
+			case 1:
+				Bullets.list.push(new Bullet(this.state.x + Style.tank/2,this.state.y,90,1,0));
+				break;
+			case 2:
+				Bullets.list.push(new Bullet(this.state.x,this.state.y + Style.tank/2,180,2,0));
+				break;
+			case 3:
+				Bullets.list.push(new Bullet(this.state.x - Style.tank/2,this.state.y,270,3,0));
+				break;
+		}
+	}
+	
+	this.remove =function(ctx){
+		ctx.fillRect(this.state.x -32,this.state.y -32,64,64);
+	}
 
 	this.update = function(frames,tileList){
 		// 引用自身
 		var that = this;
-		var state = Tanks.myTank.state,
-			moveState = Tanks.myTank.moveState;
+		var state = that.state,
+			moveState = that.moveState;
 		moveState.isMove = moveState.w || moveState.a || moveState.s || moveState.d;
 		if(moveState.isMove){
 			state.frame = Math.floor(frames/4)%2;
@@ -116,9 +137,6 @@ function Tank(){
 
 MyTank.prototype = new Tank();
 function MyTank(x,y,rota,direction,frame){
-	this.addFrame(tankImg,0,0,32,32);
-	this.addFrame(tankImg,448,0,32,32);
-
 	this.state = {
 		x : x,
 		y : y,
@@ -134,22 +152,22 @@ function MyTank(x,y,rota,direction,frame){
 	this.keyBoard = function(){
 		var that = this;
 		//发射子弹
-		function fire(){
-			switch(that.state.direction){
-				case 0:
-					Bullets.list.push(new Bullet(that.state.x,that.state.y - Style.tank/2,0,0,0));
-					break;
-				case 1:
-					Bullets.list.push(new Bullet(that.state.x + Style.tank/2,that.state.y,90,1,0));
-					break;
-				case 2:
-					Bullets.list.push(new Bullet(that.state.x,that.state.y + Style.tank/2,180,2,0));
-					break;
-				case 3:
-					Bullets.list.push(new Bullet(that.state.x - Style.tank/2,that.state.y,270,3,0));
-					break;
-			}
-		}
+		// function fire(){
+		// 	switch(that.state.direction){
+		// 		case 0:
+		// 			Bullets.list.push(new Bullet(that.state.x,that.state.y - Style.tank/2,0,0,0));
+		// 			break;
+		// 		case 1:
+		// 			Bullets.list.push(new Bullet(that.state.x + Style.tank/2,that.state.y,90,1,0));
+		// 			break;
+		// 		case 2:
+		// 			Bullets.list.push(new Bullet(that.state.x,that.state.y + Style.tank/2,180,2,0));
+		// 			break;
+		// 		case 3:
+		// 			Bullets.list.push(new Bullet(that.state.x - Style.tank/2,that.state.y,270,3,0));
+		// 			break;
+		// 	}
+		// }
 		Action.keyBind('down','W',function(){
 			that.state.direction = 0;
 			that.moveState.w = 1;
@@ -191,6 +209,64 @@ function MyTank(x,y,rota,direction,frame){
 			that.moveState.d = 0;
 		})
 
-		Action.keyBind('down','J',fire)
+		Action.keyBind('down','J',this.fire.bind(that));
+	}
+}
+
+AiTank.prototype = new Tank();
+function AiTank(x,y,rota,direction,frame){
+	this.state = {
+		x : x,
+		y : y,
+		rota : rota,
+		// 0 --> up
+		// 1 --> right
+		// 2 --> down
+		// 3 --> left 
+		direction : direction,
+		frame : frame
+	}
+
+	this.update = function(frames,tileList){
+			var times = this.counter.add();
+			if(times > 60){
+				this.moveState.d = 1;
+				this.state.direction = parseInt((Math.random() * 4));
+				switch(this.state.direction){
+					case 0:
+						this.state.rota = 0;
+						break;
+					case 1:
+						this.state.rota = 90;
+						break;
+					case 2:
+						this.state.rota = 180;
+						break;
+					case 3:
+						this.state.rota = 270;
+						break;
+				}
+				this.fire();
+				this.counter.clear();
+			}
+		AiTank.prototype.update.call(this,frames,tileList);
+	}
+
+	this.counter = newCounter();
+
+	function newCounter(){
+		var num = 0;
+		function add(){
+			return num++;
+		}
+
+		function clear(){
+			num = 0;
+		}
+
+		return {
+			add :add,
+			clear :clear
+		}
 	}
 }
