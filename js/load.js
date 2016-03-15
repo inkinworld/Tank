@@ -16,5 +16,3 @@ tankImg = load("./source/Tank.png");
 tileImg = load("./source/tile.png");
 miscImg = load("./source/Misc.png");
 boomImg = load("./source/Boom.png");
-// var tankImg;
-// var tileImg;

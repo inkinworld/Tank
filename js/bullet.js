@@ -37,8 +37,12 @@ function Bullet(x,y,rota,direction,frame){
 	}
 
 	this.exist = 1;
-	
-	this.update = function(tileList){
+
+	this.remove =function(ctx){
+		ctx.fillRect(this.state.x -8,this.state.y -8,16,16);
+	}	
+
+	this.update = function(tileList,ctx){
 		var that =this;
 		var state = this.state;
 		switch(state.direction){
@@ -56,13 +60,13 @@ function Bullet(x,y,rota,direction,frame){
 				break;
 		}
 
-		tileList.forEach(function(ele){
+		tileList.forEach(function bulletCollTest(ele){
 			var collResult = Collision.isColl(that,ele);
 			var childList = []; 
 			if( collResult.isColl ){
 				childList = ele.createChildColl();
 				if(!childList.length) return;
-				childList.forEach(function(ele){
+				childList.forEach(function bulletCollTest1(ele){
 					var isBoom = false;
 					var collResult = Collision.isColl(that,ele);
 					if(collResult.isColl){
@@ -84,7 +88,7 @@ function Bullet(x,y,rota,direction,frame){
 										//否则无影响
 									}else{
 										//射中小砖块的左上角区域, [小方块][0]
-										console.log( collResult.position.dy );
+										// console.log( collResult.position.dy );
 										if(item.list[0]){
 											//小砖块的左上角( [小方块][0] )存在，摧毁小砖块的左上角和右上角
 											item.list[0] = 0;
@@ -249,8 +253,12 @@ function Bullet(x,y,rota,direction,frame){
 			// 		state.x = ele.state.x + (ele.graph.height);
 			// 		break;
 			// }
+			// 与子弹发生作用的地砖进行状态更新与损毁绘制
+			ele.update();	
+			ele.drawDestory(ctx);
 			return;
 		}
+
 	})
 
 	if((state.x < Style.bullet/2) || (state.x > Style.canvas-Style.bullet/2) || (state.y < Style.bullet/2) || (state.y > Style.canvas-Style.bullet/2) ) 

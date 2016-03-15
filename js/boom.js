@@ -58,6 +58,7 @@ function Boom(x,y,rota,direction,frame){
 		if(num > 5) {
 			this.counder = null;
 			this.exist = 0;
+			this.counter = null;
 		}
 	}
 

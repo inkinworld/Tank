@@ -4,7 +4,7 @@ Tiles.list = [];
 var tileImg;
 
 Tile.prototype = new Sprite(Style.tile ,Style.tile ,Style.tile ,Style.tile);
-function Tile(x,y,rota,direction,frame){
+function Tile(x,y,rota,direction,frame,initType){
 	this.state = {
 		x : x,
 		y : y,
@@ -14,10 +14,12 @@ function Tile(x,y,rota,direction,frame){
 		// 2 --> down
 		// 3 --> left 
 		direction : direction,
-		frame : frame
+		frame : frame,
+		initType : initType
 		}
 
-	this.addFrame(tileImg,1120,0,32,32);
+	this.frameList = [];
+	this.addFrame(tileImg,1120,0,32,32)	;
 
 	//	 一块 [大砖块] 由四个 [小砖块] 构成（L1,R1,L2,R2）,
 	//   每个 [小砖块] 由四个 [小方块] 小方块（0,1,2,3）构成
@@ -42,28 +44,31 @@ function Tile(x,y,rota,direction,frame){
 	//		 		 ----- -----
 	//				|  2  |  3  |
 	//		 		 ----- -----
-	this.coll = {
-		L1: {
-			collState: 1,
-			complete : 1,
-			list: [1,1,1,1] 
-		},
-		L2: {
-			collState: 1,
-			complete : 1,
-			list: [1,1,1,1] 
-		},
-		R1: {
-			collState: 1,
-			complete : 1,
-			list: [1,1,1,1] 
-		},
-		R2: {
-			collState: 1,
-			complete : 1,
-			list: [1,1,1,1] 
-		}
-	}
+	this.coll = initColl(initType);
+
+	// 完整的大砖块的coll
+	// {
+	// 	L1: {
+	// 		collState: 1,
+	// 		complete : 1,
+	// 		list: [1,1,1,1] 
+	// 	},
+	// 	L2: {
+	// 		collState: 1,
+	// 		complete : 1,
+	// 		list: [1,1,1,1] 
+	// 	},
+	// 	R1: {
+	// 		collState: 1,
+	// 		complete : 1,
+	// 		list: [1,1,1,1] 
+	// 	},
+	// 	R2: {
+	// 		collState: 1,
+	// 		complete : 1,
+	// 		list: [1,1,1,1] 
+	// 	}
+	// }
 
 	this.createChildColl = function(){
 		var list = [];
@@ -107,14 +112,14 @@ function Tile(x,y,rota,direction,frame){
 	this.drawDestory =function(ctx){
 		var that = this;
 		var quenue = ['L1','R1','L2','R2'];
-		quenue.forEach(function(ele,index){ 
+		quenue.forEach(function drawDestory1(ele,index){ 
 			var item = that.coll[ele];
 			if(!item.complete){
 				// console.log(ele);
 				var x = (index%2)? that.state.x : that.state.x - Style.tank/2;
 				var y = (index < 2)? that.state.y - Style.tank/2: that.state.y; 
 				// console.log(x);
-				item.list.forEach(function(ele,index){
+				item.list.forEach(function drawDestory2(ele,index){
 					if(!ele){
 						// console.log(index);
 						var drawx = (index%2)? x + Style.tank/4 : x;
@@ -126,4 +131,40 @@ function Tile(x,y,rota,direction,frame){
 			}
 		})
 	}
+
+	function initColl(type){
+		var collTypeList = [
+			[1,0,0,0],
+			[0,1,0,0],
+			[1,1,0,0],
+			[0,0,1,0],
+			[1,0,1,0],
+			[0,1,1,0],
+			[1,1,1,0],
+			[0,0,0,1],
+			[1,0,0,1],
+			[0,1,0,1],
+			[1,1,0,1],
+			[0,0,1,1],
+			[1,0,1,1],
+			[0,1,1,1],
+			[1,1,1,1]
+		];
+		var collType = collTypeList[type]; 
+		var L1 = returnColl(collType[0]);
+		var R1 = returnColl(collType[1]);
+		var L2 = returnColl(collType[2]);
+		var R2 = returnColl(collType[3]);
+		return {
+			L1: L1,
+			L2: L2,
+			R1: R1,
+			R2: R2
+		}
+
+		function returnColl(isTrue){
+			return isTrue ?  {collState: 1, complete: 1, list: [1,1,1,1]} :  {collState: 0, complete: 0, list: [0,0,0,0]} ;
+		}
+	}
+
 }
