@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <title>地图编辑器</title>
+    <style type="text/css">
+	    * {
+	    	margin: 0px;
+	    	padding: 0px;	
+	    }
+	    #map { 
+	      	border: 1px solid black; 
+	      	margin: 32px;
+	      	/*display: block;*/
+	    }
+	    #typeChoice {
+	       	border: 1px solid black;	
+	       	margin: 32px;	
+	       	/*display: block;*/
+	    }
+
+	    #data{
+	    	margin: 32px;
+	    	height: 832px;
+	    	width: 400px;
+	    	vertical-align: top;
+	    }
+    </style>
+  </head>
+  <body>
+  	<!-- <img src="../source/Tile.png"> -->
+  	<canvas id="typeChoice" width="192" height="832"></canvas>
+    <canvas id="map" width="832" height="832"></canvas>
+    <textarea  id='data' type="text" name='data' value=""></textarea>
+    <script type="text/javascript" src="../js/style.js"></script>
+    <script type="text/javascript" src="../js/sprite.js"></script>
+    <script type="text/javascript" src="../js/tile.js"></script>
+    <script type="text/javascript" src="./js/main.js"></script>
+    <script type="text/javascript" src="./js/load.js"></script>
+  </body>
+</html>
