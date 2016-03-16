@@ -53,7 +53,7 @@ Sprite.prototype.draw = function(ctx){
 		context.translate(-w/2,-h/2);
 		// context.drawImage(image, sx, sy, sw, sh, x-(w/2), y-(h/2), w, h);
 		context.drawImage(image, sx, sy, sw, sh, 0, 0, w, h);
-		console.log(this.s);
+		// console.log(this.s);
 		context.restore();
 	}
 }
