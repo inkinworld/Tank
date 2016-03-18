@@ -95,7 +95,7 @@ function Tile(x,y,rota,direction,type,initType){
 
 	}
 
-	this.update = function(){
+	this.update = function(frames){
 		var that = this;
 		var quenue = ['L1','R1','L2','R2'];
 		quenue.forEach(function(ele){
@@ -130,7 +130,7 @@ function Tile(x,y,rota,direction,type,initType){
 		})
 	}
 
-	function initColl(type){
+	function initColl(initType,type){
 		var collTypeList = [
 			[1,0,0,0],
 			[0,1,0,0],
@@ -148,7 +148,7 @@ function Tile(x,y,rota,direction,type,initType){
 			[0,1,1,1],
 			[1,1,1,1]
 		];
-		var collType = collTypeList[type]; 
+		var collType = collTypeList[initType]; 
 		var L1 = returnColl(collType[0]);
 		var R1 = returnColl(collType[1]);
 		var L2 = returnColl(collType[2]);
