@@ -1,6 +1,11 @@
 function main(){
 	Tile.prototype.addFrame(tileImg,1120,0,32,32);
 	Tile.prototype.addFrame(tileImg,640,0,32,32);
+	Tile.prototype.addFrame(tileImg,0,0,32,32);
+	Tile.prototype.addFrame(tileImg,96,0,32,32);
+	Tile.prototype.addFrame(tileImg,128,0,32,32);
+	Tile.prototype.addFrame(tileImg,32,0,32,32);
+	Tile.prototype.addFrame(tileImg,64,0,32,32);
 	var initType = 0;
 	var tileType = 0;
 	var mapTiles = [];
@@ -90,7 +95,7 @@ function main(){
 
 	function renderChoiceType(){
 		choiceList = []
-		for(var i = 0; i < 30 ; i++){
+		for(var i = 0; i < 34 ; i++){
 			if(i<13){
 				choiceList.push(new Tile(32,32+(i*64),0,0,0,i));
 			}else if(i < 26){
@@ -100,7 +105,12 @@ function main(){
 					choiceList.push(new Tile(96,32+((i-13)*64),0,0,1,i-15));
 				}
 			}else{
-				choiceList.push(new Tile(160,32+((i-26)*64),0,0,1,i-15));
+				if(i < 30) choiceList.push(new Tile(160,32+((i-26)*64),0,0,1,i-15));
+				if(i === 30) choiceList.push(new Tile(160,32+((i-26)*64),0,0,2,14));
+				if(i === 31) choiceList.push(new Tile(160,32+((i-26)*64),0,0,3,14));
+				if(i === 32) choiceList.push(new Tile(160,32+((i-26)*64),0,0,5,14));		
+				if(i === 33) choiceList.push(new Tile(160,32+((i-26)*64),0,0,6,14));
+
 			}
 		}   
 		choiceList.forEach(function(ele){
