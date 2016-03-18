@@ -1,6 +1,10 @@
 function main(){
+	Tile.prototype.addFrame(tileImg,1120,0,32,32);
+	Tile.prototype.addFrame(tileImg,640,0,32,32);
+	var initType = 0;
 	var tileType = 0;
 	var mapTiles = [];
+	var choiceList = [];
 	var data = [];
 	var datainput = document.getElementById('data');
 	var map = document.getElementById('map');
@@ -8,6 +12,17 @@ function main(){
 	var typeChoice = document.getElementById('typeChoice');
 	typeChoiceCtx = typeChoice.getContext('2d');
 
+	var isDelete = 0;
+	var deleteButton = document.getElementById('delete');
+	deleteButton.addEventListener('click',function(){
+		if(isDelete){
+			this.style.backgroundColor = 'red';
+			isDelete = 0;
+		}else{
+			this.style.backgroundColor = 'black';
+			isDelete = 1;
+		}
+	})
 	map.addEventListener('click',function(e){
 		var corrd = corrdinate(this,e);
 		var nX = corrd.nX;
@@ -15,8 +30,21 @@ function main(){
 		var x = (nX-1)*64 + 32;
 		var y = (nY-1)*64 + 32;
 		// console.log(x + ',' + y);
-
-		mapTiles.push(new Tile(x,y,0,0,0,tileType));
+		if(isDelete){
+			var testElement = new Sprite(0,0,5,5);
+			testElement.state.x = x;
+			testElement.state.y = y;
+			mapTiles.forEach(function(tile,index){
+				var collResult = Collision.isColl(testElement,tile);
+				if(collResult.isColl){
+					mapTiles.splice(index,1);
+				}
+			})
+			drawMap(mapCtx);
+			creatMapData();
+			return;
+		}
+		mapTiles.push(new Tile(x,y,0,0,tileType,initType));
 		drawMap(mapCtx);
 		creatMapData();
 	})
@@ -25,11 +53,19 @@ function main(){
 		var corrd = corrdinate(this,e);
 		var nX = corrd.nX;
 		var nY = corrd.nY;
-		if(nX<2){
-			tileType = nY - 1;
-		}else{
-			tileType = nY - 1 +13;
-		}
+		var x = (nX-1)*64 + 32;
+		var y = (nY-1)*64 + 32;
+		var testElement = new Sprite(0,0,5,5);
+		testElement.state.x = x;
+		testElement.state.y = y;
+		choiceList.forEach(function(tile,index){
+			var collResult = Collision.isColl(testElement,tile);
+			if(collResult.isColl){
+				initType = tile.state.initType;
+				tileType = tile.type;
+				console.log(tileType)
+			}
+		})
 	})
 
 	drawMap(mapCtx);
@@ -54,16 +90,19 @@ function main(){
 
 	function renderChoiceType(){
 		choiceList = []
-		for(var i = 0; i < 15; i++){
+		for(var i = 0; i < 30 ; i++){
 			if(i<13){
 				choiceList.push(new Tile(32,32+(i*64),0,0,0,i));
-			}else if(i < 26){			
-				choiceList.push(new Tile(96,32+((i-13)*64),0,0,0,i));
+			}else if(i < 26){
+				if(i <15){	
+					choiceList.push(new Tile(96,32+((i-13)*64),0,0,0,i));
+				}else{			
+					choiceList.push(new Tile(96,32+((i-13)*64),0,0,1,i-15));
+				}
 			}else{
-				choiceList.push(new Tile(160,32+((i-26)*64),0,0,0,i));
+				choiceList.push(new Tile(160,32+((i-26)*64),0,0,1,i-15));
 			}
 		}   
-		choiceList.push(new Tile(32,32,0,0,0,0))
 		choiceList.forEach(function(ele){
 			ele.draw(typeChoiceCtx);
 			ele.drawDestory(typeChoiceCtx);
@@ -97,11 +136,13 @@ function main(){
 			var state = ele.state;
 			x = state.x;
 			y = state.y;
-			type = state.initType;
+			initType = state.initType;
+			type = ele.type;
 			data.push({
 				x: x,
 				y: y,
-				initType: type
+				initType: initType,
+				type: type
 			})
 		})
 

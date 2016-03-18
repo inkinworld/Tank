@@ -23,6 +23,14 @@
 	    	width: 400px;
 	    	vertical-align: top;
 	    }
+	    #delete{
+	    	width: 60px;
+	    	height: 60px;
+	    	background-color: red;
+	    	color: white;
+	    	font-size: 40px;
+	    	border-radius: 30px;
+	    }
     </style>
   </head>
   <body>
@@ -30,8 +38,10 @@
   	<canvas id="typeChoice" width="192" height="832"></canvas>
     <canvas id="map" width="832" height="832"></canvas>
     <textarea  id='data' type="text" name='data' value=""></textarea>
+    <button id='delete'>X</button>
     <script type="text/javascript" src="../js/style.js"></script>
     <script type="text/javascript" src="../js/sprite.js"></script>
+    <script type="text/javascript" src="../js/collision.js"></script>
     <script type="text/javascript" src="../js/tile.js"></script>
     <script type="text/javascript" src="./js/main.js"></script>
     <script type="text/javascript" src="./js/load.js"></script>
