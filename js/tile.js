@@ -4,7 +4,7 @@ Tiles.list = [];
 var tileImg;
 
 Tile.prototype = new Sprite(Style.tile ,Style.tile ,Style.tile ,Style.tile);
-function Tile(x,y,rota,direction,frame,initType){
+function Tile(x,y,rota,direction,type,initType){
 	this.state = {
 		x : x,
 		y : y,
@@ -14,12 +14,9 @@ function Tile(x,y,rota,direction,frame,initType){
 		// 2 --> down
 		// 3 --> left 
 		direction : direction,
-		frame : frame,
+		frame : type,
 		initType : initType
 		}
-
-	this.frameList = [];
-	this.addFrame(tileImg,1120,0,32,32)	;
 
 	//	 一块 [大砖块] 由四个 [小砖块] 构成（L1,R1,L2,R2）,
 	//   每个 [小砖块] 由四个 [小方块] 小方块（0,1,2,3）构成
@@ -68,8 +65,9 @@ function Tile(x,y,rota,direction,frame,initType){
 	// 		complete : 1,
 	// 		list: [1,1,1,1] 
 	// 	}
-	// }
+	// }	
 
+	this.type = type;
 	this.createChildColl = function(){
 		var list = [];
 		var that =this;
