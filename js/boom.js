@@ -12,7 +12,7 @@ function BoomClear(){
 var boomImg;
 
 Boom.prototype = new Sprite(Style.boom ,Style.boom ,0 ,0);
-function Boom(x,y,rota,direction,frame){
+function Boom(x,y,rota,direction,frame,type){
 	this.addFrame(boomImg,0,0,64,64);
 	this.addFrame(boomImg,64,0,64,64);
 	this.addFrame(boomImg,128,0,64,64);
@@ -32,33 +32,62 @@ function Boom(x,y,rota,direction,frame){
 	}
 
 	this.exist = 1; 
+	this.type = type;
 
 	this.update = function(){
 		var num = this.counter()
-		if(num < 2){ 
-			this.state.frame = 0;
-			return;
-		}
-		if(num < 4){
-			this.state.frame = 1;
-			return;
-		}
-		if(num < 6){
-			this.state.frame = 2;
-			return;
-		}
-		// if(num < 8){
-		// 	this.state.frame = 3;
-		// 	return;
-		// }
-		// if(num < 10){
-		// 	this.state.frame = 4;
-		// 	return;
-		// }
-		if(num > 5) {
-			this.counder = null;
-			this.exist = 0;
-			this.counter = null;
+		if(this.type === 0){
+			if(num < 2){ 
+				this.state.frame = 0;
+				return;
+			}
+			if(num < 4){
+				this.state.frame = 1;
+				return;
+			}
+			if(num < 6){
+				this.state.frame = 2;
+				return;
+			}
+			// if(num < 8){
+			// 	this.state.frame = 3;
+			// 	return;
+			// }
+			// if(num < 10){
+			// 	this.state.frame = 4;
+			// 	return;
+			// }
+			if(num > 5) {
+				this.counder = null;
+				this.exist = 0;
+				this.counter = null;
+			}
+		}else{
+			if(num < 2){ 
+				this.state.frame = 0;
+				return;
+			}
+			if(num < 4){
+				this.state.frame = 1;
+				return;
+			}
+			if(num < 6){
+				this.state.frame = 2;
+				return;
+			}
+			if(num < 8){
+				this.state.frame = 3;
+				return;
+			}
+			if(num < 10){
+				this.state.frame = 4;
+				return;
+			}
+			if(num > 9) {
+				this.counder = null;
+				this.exist = 0;
+				this.counter = null;
+			}	
 		}
 	}
 
