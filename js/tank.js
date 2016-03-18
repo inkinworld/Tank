@@ -1,5 +1,12 @@
 var Tanks = {};
-Tanks.list = [];
+Tanks.teamList = [[],[]];
+function TanksClear(){
+	Tanks.teamList.forEach(function(list){
+		list.forEach(function(ele,index){
+			if(!ele.exist) list.splice(index,1);
+		})
+	})
+}
 // 坦克素材图片，在load模块加载；
 var tankImg;
 Tank.prototype = new Sprite(Style.tank ,Style.tank ,Style.tank ,Style.tank);
@@ -23,19 +30,26 @@ function Tank(){
 		d: 0,
 		isMove: false
 	}
+
+	// 坦克类型
+	this.type = 0;
+	this.exist = 1;
+
+	this.team;
+
 	this.fire = function(){
 		switch(this.state.direction){
 			case 0:
-				Bullets.list.push(new Bullet(this.state.x,this.state.y - Style.tank/2,0,0,0));
+				Bullets.teamList[this.team].push(new Bullet(this.state.x,this.state.y - Style.tank/2,0,0,0));
 				break;
 			case 1:
-				Bullets.list.push(new Bullet(this.state.x + Style.tank/2,this.state.y,90,1,0));
+				Bullets.teamList[this.team].push(new Bullet(this.state.x + Style.tank/2,this.state.y,90,1,0));
 				break;
 			case 2:
-				Bullets.list.push(new Bullet(this.state.x,this.state.y + Style.tank/2,180,2,0));
+				Bullets.teamList[this.team].push(new Bullet(this.state.x,this.state.y + Style.tank/2,180,2,0));
 				break;
 			case 3:
-				Bullets.list.push(new Bullet(this.state.x - Style.tank/2,this.state.y,270,3,0));
+				Bullets.teamList[this.team].push(new Bullet(this.state.x - Style.tank/2,this.state.y,270,3,0));
 				break;
 		}
 	}
@@ -44,7 +58,7 @@ function Tank(){
 		ctx.fillRect(this.state.x -32,this.state.y -32,64,64);
 	}
 
-	this.update = function(frames,tileList){
+	this.update = function(frames){
 		var collTestList = [];
 		// 引用自身
 		var that = this;
@@ -53,7 +67,7 @@ function Tank(){
 		var isMidd;
 		moveState.isMove = moveState.w || moveState.a || moveState.s || moveState.d;
 		if(moveState.isMove){
-			state.frame = Math.floor(frames/4)%2;
+			state.frame = Math.floor(frames/4)%2  + (2*this.type);
 			switch(that.state.direction){
 				case 0:
 					state.y -= Style.tankSpeed;
@@ -143,26 +157,28 @@ function Tank(){
 				return;
 			})
 
-			Tanks.list.forEach(function(tank){
-				if(tank === that) return;
-				var collResult = Collision.isColl(that,tank);
-				if(collResult.isColl){
-					switch(that.state.direction){
-						case 0:
-							state.y = tank.state.y + (tank.volume.height/2) + (Style.tank/2);
-							break;
-						case 1:
-							state.x = tank.state.x - (tank.volume.height/2) - (Style.tank/2);
-							break;
-						case 2:
-							state.y = tank.state.y - (tank.volume.height/2) - (Style.tank/2);
-							break;
-						case 3:
-							state.x = tank.state.x + (tank.volume.height/2) + (Style.tank/2);
-							break;
+			Tanks.teamList.forEach(function(team){
+				team.forEach(function(tank){
+					if(tank === that) return;
+					var collResult = Collision.isColl(that,tank);
+					if(collResult.isColl){
+						switch(that.state.direction){
+							case 0:
+								state.y = tank.state.y + (tank.volume.height/2) + (Style.tank/2);
+								break;
+							case 1:
+								state.x = tank.state.x - (tank.volume.height/2) - (Style.tank/2);
+								break;
+							case 2:
+								state.y = tank.state.y - (tank.volume.height/2) - (Style.tank/2);
+								break;
+							case 3:
+								state.x = tank.state.x + (tank.volume.height/2) + (Style.tank/2);
+								break;
+						}
 					}
-				}
-			 	return;
+				 	return;
+				})
 			})
 
 			// 修正超出画布
@@ -189,99 +205,10 @@ function Tank(){
 
 	}
 
-	this.updateBackup = function(frames,tileList){
-		// 引用自身
-		var that = this;
-		var state = that.state,
-			moveState = that.moveState;
-		moveState.isMove = moveState.w || moveState.a || moveState.s || moveState.d;
-		if(moveState.isMove){
-			state.frame = Math.floor(frames/4)%2;
-			switch(that.state.direction){
-				case 0:
-					state.y -= Style.tankSpeed;
-					correct(0);
-					break;
-				case 1:
-					state.x += Style.tankSpeed;
-					correct(1);
-					break;
-				case 2:
-					state.y += Style.tankSpeed;
-					correct(0);
-					break;
-				case 3:
-					state.x -= Style.tankSpeed;
-					correct(1);
-					break;
-			}
-
-			tileList.forEach(function(ele){
-				var collResult = Collision.isColl(that,ele);
-				var childList = []; 
-				if( collResult.isColl ){
-					childList = ele.createChildColl();
-					if(!childList.length) return;
-					childList.forEach(function(ele){
-						var collResult = Collision.isColl(that,ele);
-						if(collResult.isColl){
-							switch(that.state.direction){
-								case 0:
-									state.y = ele.state.y + (ele.volume.height/2) + (Style.tank/2);
-									break;
-								case 1:
-									state.x = ele.state.x - (ele.volume.height/2) - (Style.tank/2);
-									break;
-								case 2:
-									state.y = ele.state.y - (ele.volume.height/2) - (Style.tank/2);
-									break;
-								case 3:
-									state.x = ele.state.x + (ele.volume.height/2) + (Style.tank/2);
-									break;
-							}
-						}
-					})
-					// switch(Tanks.myTank.state.direction){
-					// 	case 0:
-					// 		state.y = ele.state.y + (ele.volume.height);
-					// 		break;
-					// 	case 1:
-					// 		state.x = ele.state.x - (ele.volume.height);
-					// 		break;
-					// 	case 2:
-					// 		state.y = ele.state.y - (ele.volume.height);
-					// 		break;
-					// 	case 3:
-					// 		state.x = ele.state.x + (ele.volume.height);
-					// 		break;
-					// }
-					return;
-				}
-			})
-			// 修正超出画布
-			if(state.x < Style.tank/2) state.x = Style.tank/2;
-			if(state.x > Style.canvas-32) state.x = Style.canvas-32;
-			if(state.y < Style.tank/2) state.y = Style.tank/2;
-			if(state.y > Style.canvas-32) state.y = Style.canvas-32;
-		} 
-		// 修正运动
-		function correct(type){
-			switch(type){
-				case 0:
-					state.x = Math.round(state.x / (Style.tank / 2)) * (Style.tank/2);
-					break;
-				case 1:
-					state.y = Math.round(state.y / (Style.tank / 2)) * (Style.tank/2);
-					break;
-			}
-		}
-
-	}
-
 }
 
 MyTank.prototype = new Tank();
-function MyTank(x,y,rota,direction,frame){
+function MyTank(x,y,rota,direction,frame,type){
 	this.state = {
 		x : x,
 		y : y,
@@ -293,6 +220,9 @@ function MyTank(x,y,rota,direction,frame){
 		direction : direction,
 		frame : frame
 	}
+
+	this.type = type;
+	this.team = 0;
 
 	this.keyBoard = function(){
 		var that = this;
@@ -359,7 +289,7 @@ function MyTank(x,y,rota,direction,frame){
 }
 
 AiTank.prototype = new Tank();
-function AiTank(x,y,rota,direction,frame){
+function AiTank(x,y,rota,direction,frame,type){
 	this.state = {
 		x : x,
 		y : y,
@@ -372,11 +302,15 @@ function AiTank(x,y,rota,direction,frame){
 		frame : frame
 	}
 
+	this.type = type;
+	this.team = 1;
+
 	this.update = function(frames,tileList){
 		var times = this.counter.add();
 		if(times > 60){
 			this.moveState.d = 1;
 			this.state.direction = parseInt((Math.random() * 4));
+			// this.state.direction = 2;
 			switch(this.state.direction){
 				case 0:
 					this.state.rota = 0;
