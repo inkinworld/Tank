@@ -9,9 +9,16 @@ function main(){
 	Tank.prototype.addFrame(tankImg,576,0,32,32);
 	Tile.prototype.addFrame(tileImg,1120,0,32,32);
 	Tile.prototype.addFrame(tileImg,640,0,32,32);
+	Tile.prototype.addFrame(tileImg,0,0,32,32);
+	Tile.prototype.addFrame(tileImg,96,0,32,32);
+	Tile.prototype.addFrame(tileImg,128,0,32,32);
+	Tile.prototype.addFrame(tileImg,32,0,32,32);
+	Tile.prototype.addFrame(tileImg,64,0,32,32);
 	Bullet.prototype.addFrame(miscImg,0,0,8,8);	
+
 	ctx = document.getElementById('canvas').getContext('2d');
 	boomCtx = document.getElementById('boomLayer').getContext('2d');
+	grassCtx = document.getElementById('grassLyer').getContext('2d');
 	tankCtx = document.getElementById('tankLayer').getContext('2d');
 	Tanks.myTank = new MyTank(96,800,0,0,0,0);
 	Tanks.myTank.keyBoard();
@@ -31,7 +38,7 @@ function main(){
 
 	//绘制背景
 	ctx.fillRect(0,0,Style.canvas,Style.canvas);
-	map.forEach(function(col,index){
+	map.mapArray.forEach(function(col,index){
 		col.forEach(function(tile,i){
 			if(!tile) return;	
 			// console.log(index,i)
@@ -41,10 +48,20 @@ function main(){
 			tile.drawDestory(ctx);
 		})
 	})
+	map.grassArray.forEach(function(tile){
+		tile.update();
+		tile.draw(grassCtx);
+		tile.drawDestory(grassCtx);		
+	})
 
 	function draw(){
 		iframes = (iframes + 1)%60;
 
+		//改变河流状态
+		map.riverArray.forEach(function(river){
+			river.state.frame = Math.floor(iframes/20)%2  + 3;
+			river.draw(ctx);
+		})
 		//清除坦克图层
 		tankCtx.clearRect(0,0,832,832);
 		//子弹状态更新
