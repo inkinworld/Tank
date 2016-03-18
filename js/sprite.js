@@ -1,11 +1,11 @@
 var Sprites = {};
 function Sprite(gw,gh,vw,vh){
-	//图形碰撞体积
+	//图形绘图大小
 	this.graph = {
 		width: gw,
 		height: gh
 	}
-
+	//图形碰撞体积
 	this.volume = {
 		width: vw,
 		height: vh
@@ -19,7 +19,7 @@ function Sprite(gw,gh,vw,vh){
 		// 1 --> right
 		// 2 --> down
 		// 3 --> left 
-		direction : 0,
+		direction : 0,	
 		frame : 0
 	}
 
