@@ -200,7 +200,7 @@ function Tank(){
 		}
 
 		function addCollTest(col,row){
-			if(0<=row && row <13 &&  0 <= col && col <13) collTestList.push(map[col][row]);
+			if(0<=row && row <13 &&  0 <= col && col <13) collTestList.push(map.mapArray[col][row]);
 		}
 
 	}
