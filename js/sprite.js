@@ -69,5 +69,23 @@ Sprite.prototype.addFrame = function(image,x,y,w,h){
 	})
 }
 
+Sprite.prototype.newCounter = function(){
+	var num = 0;
+	function add(){
+		return num++;
+	}
+
+	function clear(){
+		num = 0;
+	}
+
+	return {
+		add :add,
+		clear :clear
+	}
+}	
  
+Sprite.prototype.remove = function(ctx){
+	ctx.fillRect(this.state.x -32,this.state.y -32,this.graph.width,this.graph.height);
+}
 
