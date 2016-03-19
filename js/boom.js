@@ -13,12 +13,6 @@ var boomImg;
 
 Boom.prototype = new Sprite(Style.boom ,Style.boom ,0 ,0);
 function Boom(x,y,rota,direction,frame,type){
-	this.addFrame(boomImg,0,0,64,64);
-	this.addFrame(boomImg,64,0,64,64);
-	this.addFrame(boomImg,128,0,64,64);
-	this.addFrame(boomImg,192,0,64,64);	
-	this.addFrame(boomImg,256,0,64,64);	
-
 	this.state = {
 		x : x,
 		y : y,
@@ -33,70 +27,60 @@ function Boom(x,y,rota,direction,frame,type){
 
 	this.exist = 1; 
 	this.type = type;
+	this.counter = this.newCounter();
+}
 
-	this.update = function(){
-		var num = this.counter()
-		if(this.type === 0){
-			if(num < 2){ 
-				this.state.frame = 0;
-				return;
-			}
-			if(num < 4){
-				this.state.frame = 1;
-				return;
-			}
-			if(num < 6){
-				this.state.frame = 2;
-				return;
-			}
-			// if(num < 8){
-			// 	this.state.frame = 3;
-			// 	return;
-			// }
-			// if(num < 10){
-			// 	this.state.frame = 4;
-			// 	return;
-			// }
-			if(num > 5) {
-				this.counder = null;
-				this.exist = 0;
-				this.counter = null;
-			}
-		}else{
-			if(num < 2){ 
-				this.state.frame = 0;
-				return;
-			}
-			if(num < 4){
-				this.state.frame = 1;
-				return;
-			}
-			if(num < 6){
-				this.state.frame = 2;
-				return;
-			}
-			if(num < 8){
-				this.state.frame = 3;
-				return;
-			}
-			if(num < 10){
-				this.state.frame = 4;
-				return;
-			}
-			if(num > 9) {
-				this.counder = null;
-				this.exist = 0;
-				this.counter = null;
-			}	
+Boom.prototype.update = function(){
+	var num = this.counter.add()
+	if(this.type === 0){
+		if(num < 2){ 
+			this.state.frame = 0;
+			return;
 		}
-	}
-
-	this.counter = newCounter();
-
-	function newCounter(){
-		var num = 0;
-		return function(){
-			return num++; 
+		if(num < 4){
+			this.state.frame = 1;
+			return;
 		}
+		if(num < 6){
+			this.state.frame = 2;
+			return;
+		}
+		// if(num < 8){
+		// 	this.state.frame = 3;
+		// 	return;
+		// }
+		// if(num < 10){
+		// 	this.state.frame = 4;
+		// 	return;
+		// }
+		if(num > 5) {
+			this.exist = 0;
+			this.counter = null;
+		}
+	}else{
+		if(num < 2){ 
+			this.state.frame = 0;
+			return;
+		}
+		if(num < 4){
+			this.state.frame = 1;
+			return;
+		}
+		if(num < 6){
+			this.state.frame = 2;
+			return;
+		}
+		if(num < 8){
+			this.state.frame = 3;
+			return;
+		}
+		if(num < 10){
+			this.state.frame = 4;
+			return;
+		}
+		if(num > 9) {
+			this.exist = 0;
+			this.counter = null;
+		}	
 	}
 }
