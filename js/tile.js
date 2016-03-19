@@ -68,67 +68,6 @@ function Tile(x,y,rota,direction,type,initType){
 	// }	
 
 	this.type = type;
-	this.createChildColl = function(){
-		var list = [];
-		var that =this;
-		var quenue = ['L1','R1','L2','R2'];
-		quenue.forEach(function(ele,index){
-			var item = that.coll[ele];
-			if(item.collState){
-				var result = {
-					tile: item,
-					state:{
-						x: (index%2)? that.state.x + Style.tank/4 : that.state.x - Style.tank/4,
-						y: (index < 2)? that.state.y - Style.tank/4 : that.state.y + Style.tank/4
-					},
-					volume:{
-						width: Style.tank/2,
-						height: Style.tank/2
-					}
-				}
-				// console.log(result);
-				list.push(result);
-			}
-		})
-		// console.log(list);
-		return list;
-
-	}
-
-	this.update = function(frames){
-		var that = this;
-		var quenue = ['L1','R1','L2','R2'];
-		quenue.forEach(function(ele){
-			var ele = that.coll[ele];
-			var list = ele.list;
-			if( !(list[0] || list[1] || list[2] || list[3]) )
-				ele.collState = 0;
-		})
-	}
-
-	// 损毁的地砖绘制
-	this.drawDestory =function(ctx){
-		var that = this;
-		var quenue = ['L1','R1','L2','R2'];
-		quenue.forEach(function drawDestory1(ele,index){ 
-			var item = that.coll[ele];
-			if(!item.complete){
-				// console.log(ele);
-				var x = (index%2)? that.state.x : that.state.x - Style.tank/2;
-				var y = (index < 2)? that.state.y - Style.tank/2: that.state.y; 
-				// console.log(x);
-				item.list.forEach(function drawDestory2(ele,index){
-					if(!ele){
-						// console.log(index);
-						var drawx = (index%2)? x + Style.tank/4 : x;
-						var drawy = ((index < 2)? 0 : Style.tank/4) +y;
-						// ctx.fillStyle = 'red';
-						ctx.fillRect(drawx,drawy,16,16);
-					}
-				})
-			}
-		})
-	}
 
 	function initColl(initType,type){
 		var collTypeList = [
@@ -165,4 +104,66 @@ function Tile(x,y,rota,direction,type,initType){
 		}
 	}
 
+}
+
+Tile.prototype.createChildColl = function(){
+	var list = [];
+	var that =this;
+	var quenue = ['L1','R1','L2','R2'];
+	quenue.forEach(function(ele,index){
+		var item = that.coll[ele];
+		if(item.collState){
+			var result = {
+				tile: item,
+				state:{
+					x: (index%2)? that.state.x + Style.tank/4 : that.state.x - Style.tank/4,
+					y: (index < 2)? that.state.y - Style.tank/4 : that.state.y + Style.tank/4
+				},
+				volume:{
+					width: Style.tank/2,
+					height: Style.tank/2
+				}
+			}
+			// console.log(result);
+			list.push(result);
+		}
+	})
+	// console.log(list);
+	return list;
+
+}
+
+Tile.prototype.update = function(frames){
+	var that = this;
+	var quenue = ['L1','R1','L2','R2'];
+	quenue.forEach(function(ele){
+		var element = that.coll[ele];
+		var list = element.list;
+		if( !(list[0] || list[1] || list[2] || list[3]) )
+			element.collState = 0;
+	})
+}
+
+// 损毁的地砖绘制
+Tile.prototype.drawDestory =function(ctx){
+	var that = this;
+	var quenue = ['L1','R1','L2','R2'];
+	quenue.forEach(function drawDestory1(ele,index){ 
+		var item = that.coll[ele];
+		if(!item.complete){
+			// console.log(ele);
+			var x = (index%2)? that.state.x : that.state.x - Style.tank/2;
+			var y = (index < 2)? that.state.y - Style.tank/2: that.state.y; 
+			// console.log(x);
+			item.list.forEach(function drawDestory2(ele,index){
+				if(!ele){
+					// console.log(index);
+					var drawx = (index%2)? x + Style.tank/4 : x;
+					var drawy = ((index < 2)? 0 : Style.tank/4) +y;
+					// ctx.fillStyle = 'red';
+					ctx.fillRect(drawx,drawy,16,16);
+				}
+			})
+		}
+	})
 }
