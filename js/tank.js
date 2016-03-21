@@ -280,48 +280,48 @@ function MyTank(x,y,rota,direction,frame,type){
 		// 			break;
 		// 	}
 		// }
-		Action.keyBind('down','W',function(){
+		Action.keyBind.bind('down','W',function(){
 			that.state.direction = 0;
 			that.moveState.w = 1;
 			that.state.rota = 0;	
 		})
 
-		Action.keyBind('down','S',function(){
+		Action.keyBind.bind('down','S',function(){
 			that.state.direction = 2;
 			that.moveState.s = 1;
 			that.state.rota = 180;
 		})
 
-		Action.keyBind('down','A',function(){
+		Action.keyBind.bind('down','A',function(){
 			that.state.direction = 3;
 			that.moveState.a = 1;	
 			that.state.rota = 270;
 		})
 
-		Action.keyBind('down','D',function(){
+		Action.keyBind.bind('down','D',function(){
 			that.state.direction = 1;
 			that.moveState.d = 1;
 			that.state.rota = 90;
 		})
 
 		//当按键抬起
-		Action.keyBind('up','W',function(){
+		Action.keyBind.bind('up','W',function(){
 			that.moveState.w = 0;
 		})
 
-		Action.keyBind('up','S',function(){
+		Action.keyBind.bind('up','S',function(){
 			that.moveState.s = 0;
 		})
 
-		Action.keyBind('up','A',function(){
+		Action.keyBind.bind('up','A',function(){
 			that.moveState.a = 0;	
 		})
 
-		Action.keyBind('up','D',function(){
+		Action.keyBind.bind('up','D',function(){
 			that.moveState.d = 0;
 		})
 
-		Action.keyBind('down','J',this.fire.bind(that));
+		Action.keyBind.bind('down','J',this.fire.bind(that));
 	}
 }
 
