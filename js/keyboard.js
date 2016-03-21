@@ -17,38 +17,39 @@ Action.keyBind = (function(){
 		})
 	}
 
-	return function(state,keyChar,handle){
-		var keyCode = keyChar.charCodeAt();
-		var ele = {
-			keyCode : keyCode,
-			handle : handle
-		}	
-		switch(state){
-			case 'down': 
-				eventDownList.push(ele);
-				break;
-			case 'up':
-				eventUpList.push(ele);
-				break;
+	return {
+		bind: function(state,keyChar,handle){
+			var keyCode = keyChar.charCodeAt();
+			var ele = {
+				keyCode : keyCode,
+				handle : handle
+			}	
+			switch(state){
+				case 'down': 
+					eventDownList.push(ele);
+					break;
+				case 'up':
+					eventUpList.push(ele);
+					break;
+			}
+		},
+		deBind: function(keyChar){
+			var keyCode = keyChar.charCodeAt();
+			eventDownList.forEach(function(ele,index){
+				if(ele.keyCode === keyCode)
+					eventDownList.splice(index,1);
+			})
+			eventUpList.forEach(function(ele,index){
+				if(ele.keyCode === keyCode)
+					eventUpList.splice(index,1);
+			})
+		},
+		clear: function(){
+			eventDownList = [];
+			eventUpList = [];
 		}
 	}
 })()
 
-
-	// Action.keyBind('W',function(){
-	// 	console.log('w')
-	// })
-
-	// Action.keyBind('S',function(){
-	// 	console.log('s')
-	// })
-
-	// Action.keyBind('A',function(){
-	// 	console.log('a')
-	// })
-
-	// Action.keyBind('D',function(){
-	// 	console.log('d')
-	// })
 
 
