@@ -1,9 +1,16 @@
+//场景对象
+//isPrepared 属性表示场景渲染准备是否完成
+//isFinished 属性表示渲染程度是否适合绑定按键事件
+//isBind 属性表示是否完成按键绑定
+//prepare 方法： 对场景的渲染进行准备工作，并返回render和keybind方法，
+//在准备完成后可以使用这两个方法；
 function Sense(prepare){
 	this.isPrepared =  0;
 	this.isFinished = 0;
 	this.isKeyBind = 0;
 	this.prepare = prepare;
 }
+//init 方法初始化C场景对象
 Sense.prototype.init = function(){
 	this.isPrepared =  0;
 	this.isFinished = 0;
@@ -27,12 +34,17 @@ App.static = {
 App.state = App.static.loading;
 App.lastState = App.static.loading;
 
+//初始化应用状态
 App.initAllSense = function(){
 	App.load.init();
 	App.choiceMission.init();
 	App.game.init();
 	App.score.init();
 }
+
+//Sense 管理函数
+//执行逻辑： 判断当前App状态，选择对应的Sense  =》 判断该Sense是否完成准备工作 =》 诺完成准备工作则，使用该Sense的render方法进行渲染 =》
+//当Sense 执行至特定状态则更改 App.state。  可循环进行； 
 App.main = function(){
 	switch(App.state){
 		case  App.static.loading:
@@ -63,6 +75,7 @@ App.main = function(){
 	window.requestAnimationFrame(App.main);
 }
 
+//应用准备
 App.prepare = function(tile,boom,grass,tank,buffer){
 	//添加帧图片
 	Game.Tank.addFrames();
@@ -87,6 +100,7 @@ App.prepare = function(tile,boom,grass,tank,buffer){
 
 }
 
+//游戏开始的场景，具有选择1player,players的功能
 App.load = new Sense(null);
 App.load.prepare = function(){
 	//初始化游戏状态
@@ -163,6 +177,7 @@ App.load.prepare = function(){
 	}
 }
 
+//选关场景
 App.choiceMission = new Sense(null);
 App.choiceMission.prepare = function(){
 	that = this;
@@ -221,6 +236,7 @@ App.choiceMission.prepare = function(){
 	}
 }
 
+//游戏进行场景
 App.game = new Sense(null);
 App.game.prepare = function(){
 	//读取地图数据
@@ -329,6 +345,7 @@ App.game.prepare = function(){
 	}
 }
 
+//计分场景
 App.score = new Sense(null);
 App.score.prepare = function(){
 

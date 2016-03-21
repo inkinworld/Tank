@@ -1,3 +1,4 @@
+//碰撞检测模块
 var Collision = {};
 Collision.isColl = function(a,b){
 	// rigth -->0

@@ -1,5 +1,7 @@
 //键盘事件管理
 //keyBind([key],[handle])
+//debind 解除特定按键绑定
+//clear 解除所有按键绑定
 var Action = {};
 Action.keyBind = (function(){
 	var eventDownList = [],

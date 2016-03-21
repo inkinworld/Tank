@@ -1,3 +1,10 @@
+//	计数器模块
+//	type 0：循环计数器，达到limit则归0,小于0变为limit；
+//	type 1： 普通计数器
+//	add方法 num+１；
+//	reduce方法 num-1；
+//	n 方法 返回 num；
+//	clear 方法 num = 0;
 function newCounter(type,limit){
 	var num = 0;
 	var upLimit = limit? limit:0;

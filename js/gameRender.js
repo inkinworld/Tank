@@ -1,3 +1,4 @@
+//游戏模块，将游戏各类对象的渲染，添加帧模块化
 Game = {};
 Game.Tank = {};
 Game.Tile = {};
@@ -140,19 +141,30 @@ Game.Boom.render = function(ctx){
 	})	
 }
 
+//游戏逻辑状态变量
+//当前的关卡
 Game.Logic.currentMission = 0;
+//未登场敌人数量
 Game.Logic.enemyNum = 20;
+//存活敌人数量
 Game.Logic.enemyServive = 20;
+//英雄坦克HP
 Game.Logic.heroHp = 3;
-Game.Logic.enemyTime = 0;
+//英雄坦克是否存活
 Game.Logic.isHero1Servive = 0;
+//游戏是否失败
 Game.Logic.isGameOver = 0;
+//游戏是否开始
 Game.Logic.isBegin = 0;
+//当前关卡是否通关
 Game.Logic.isSuccess = 0;
+//游戏是否暂停
 Game.Logic.isPause = 0;
+//坦克产生的计时器
 Game.Logic.heroCounter = newCounter(1);
 Game.Logic.enemyCounter = newCounter(0,200);
 
+//游戏逻辑的初始化
 Game.Logic.initGame = function(){
 	Game.Logic.currentMission = 0;
 	Game.Logic.enemyNum = 20;
@@ -173,6 +185,7 @@ Game.Logic.initGame = function(){
 	Booms.list = [];
 }
 
+//判断游戏逻辑的状态
 Game.Logic.gameStatae = function(){
 	var logic = Game.Logic;
 	if(logic.heroHp === 0){
@@ -182,6 +195,7 @@ Game.Logic.gameStatae = function(){
 	if(logic.enemyServive === 0) logic.isSuccess = 1;
 }
 
+//创建英雄坦克
 Game.Logic.createHero = function(){
 	var hero;
 	var logic = Game.Logic;
@@ -204,6 +218,7 @@ Game.Logic.createHero = function(){
 	}
 }
 
+//创建敌军
 Game.Logic.createEnemy = function(){
 	if(Game.Logic.enemyCounter.n() === 100){
 		if(Game.Logic.enemyNum === 0) return;
