@@ -66,11 +66,11 @@ Bullet.prototype.update = function(ctx,teamNum){
 		}
 
 		if(isMidd){
-			var col = (state.x-32)/64;
+			var col = Math.floor((state.x-32)/64);
 			// console.log(col + ',' + row);
 			addCollTest(col,row)
 		}else{
-			var col1 = (state.x-64)/64;
+			var col1 = Math.floor((state.x-64)/64);
 			var col2 = col1+1;
 			addCollTest(col1,row);
 			addCollTest(col2,row);
@@ -86,11 +86,11 @@ Bullet.prototype.update = function(ctx,teamNum){
 		}
 
 		if(isMidd){
-			var row = (state.y-32)/64;
+			var row = Math.floor((state.y-32)/64);
 			// console.log(col + ',' + row);
 			addCollTest(col,row);
 		}else{
-			var row1 = (state.y-64)/64;
+			var row1 = Math.floor((state.y-64)/64);
 			var row2 = row1 + 1;
 			addCollTest(col,row1);
 			addCollTest(col,row2);
@@ -333,8 +333,14 @@ Bullet.prototype.update = function(ctx,teamNum){
 			var collResult = Collision.isColl(that,tank);
 			if(collResult.isColl){ 
 				Booms.list.push(new Boom(tank.state.x,tank.state.y,0,0,0,1));
+				if(index === 0) {
+					Game.Logic.isHero1Servive =0;
+					Game.Logic.heroHp --;
+				}
+				if(index === 1) Game.Logic.enemyServive --;
 				that.exist = 0;
 				tank.exist = 0;
+				Game.Thumbnail.render(App.ctx.tile);
 			}				
 		})
 	})
@@ -393,7 +399,7 @@ Bullet.prototype.update = function(ctx,teamNum){
 				tile.state.frame = 6;
 				tile.remove(ctx);
 				tile.draw(ctx);
-				App.state.play = 0;
+				Game.Logic.isGameOver = 1;
 				return {
 					isBoom:true,
 					boomType: 1
