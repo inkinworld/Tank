@@ -22,8 +22,6 @@ function Tank(){
 		direction : 0,
 		lastDirection :0,
 		frame : 0,
-		isSlip : 0,
-		lastIsControl : 0
 	}
 
 	this.moveState = {
@@ -72,6 +70,16 @@ Tank.prototype.update = function(frames){
 
 	currentList = onWhichTile(state.lastDirection);
 
+	//坦克生成动画
+	if(state.bornCountDown !==0){
+		state.frame = Math.floor(state.bornCountDown/4) +14;
+		state.bornCountDown--;
+		return;
+	}else{
+		state.frame = that.type * 2;
+	}
+
+	//判断是否在冰面上
 	var isOnIce =1;
 	currentList.forEach(function(tile){
 		if(!tile){
@@ -81,6 +89,7 @@ Tank.prototype.update = function(frames){
 		if(tile.type !== 7) isOnIce =0;
 	})
 
+	//雪地运动
 	if(isOnIce && state.lastIsControl && !moveState.isMove) state.isSlip = 1;
 	if(state.isSlip && isOnIce){
 		if(that.slipCounter.add()<40){
@@ -254,7 +263,10 @@ function MyTank(x,y,rota,direction,frame,type){
 		// 2 --> down
 		// 3 --> left 
 		direction : direction,
-		frame : frame
+		frame : frame,		
+		isSlip : 0,
+		lastIsControl : 0,
+		bornCountDown : 15
 	}
 
 	this.type = type;
@@ -336,7 +348,10 @@ function AiTank(x,y,rota,direction,frame,type){
 		// 2 --> down
 		// 3 --> left 
 		direction : direction,
-		frame : frame
+		frame : frame,		
+		isSlip : 0,
+		lastIsControl : 0,
+		bornCountDown : 15
 	}
 
 	this.type = type;
