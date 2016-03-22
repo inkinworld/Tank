@@ -35,10 +35,37 @@ Game.Thumbnail.render =function(ctx){
 }
 
 Game.Tank.addFrames = function(){
+	//0普通英雄坦克
 	Tank.prototype.addFrame(tankImg,0,0,32,32);
 	Tank.prototype.addFrame(tankImg,448,0,32,32);
+
+	//1灰色敌方坦克
 	Tank.prototype.addFrame(tankImg,128,0,32,32);
-	Tank.prototype.addFrame(tankImg,576,0,32,32);	
+	Tank.prototype.addFrame(tankImg,576,0,32,32);
+	//2红色敌方坦克	
+	Tank.prototype.addFrame(tankImg,160,0,32,32);
+	Tank.prototype.addFrame(tankImg,608,0,32,32);
+
+	//3灰色敌方坦克升级1
+	Tank.prototype.addFrame(tankImg,192,0,32,32);
+	Tank.prototype.addFrame(tankImg,640,0,32,32);
+	//4红色敌方坦克升级1
+	Tank.prototype.addFrame(tankImg,224,0,32,32);
+	Tank.prototype.addFrame(tankImg,672,0,32,32);
+
+	//5灰色敌方坦克升级2
+	Tank.prototype.addFrame(tankImg,256,0,32,32);
+	Tank.prototype.addFrame(tankImg,704,0,32,32);
+	//6红色敌方坦克升级2
+	Tank.prototype.addFrame(tankImg,288,0,32,32);
+	Tank.prototype.addFrame(tankImg,736,0,32,32);
+
+	//出生动画
+	Tank.prototype.addFrame(tankImg,3584,0,32,32);
+	Tank.prototype.addFrame(tankImg,3616,0,32,32);
+	Tank.prototype.addFrame(tankImg,3648,0,32,32);
+	Tank.prototype.addFrame(tankImg,3680,0,32,32);
+
 }
 
 Game.Tank.render = function(ctx,frame){
@@ -162,7 +189,7 @@ Game.Logic.isSuccess = 0;
 Game.Logic.isPause = 0;
 //坦克产生的计时器
 Game.Logic.heroCounter = newCounter(1);
-Game.Logic.enemyCounter = newCounter(0,200);
+Game.Logic.enemyCounter = newCounter(0,400);
 
 //游戏逻辑的初始化
 Game.Logic.initGame = function(){
@@ -220,29 +247,31 @@ Game.Logic.createHero = function(){
 
 //创建敌军
 Game.Logic.createEnemy = function(){
-	if(Game.Logic.enemyCounter.n() === 100){
+	if(Game.Logic.enemyCounter.n() === 150){
+		Game.Logic.enemyCounter.add();
 		if(Game.Logic.enemyNum === 0) return;
 		var logic = Game.Logic;
 		var team = Tanks.teamList[1];
 		var n = 5 - team.length; 
 		if(n === 0) return;
 		if( (n >= 3) && (Game.Logic.enemyNum >= 3) ){
-			Tanks.teamList[1].push(new AiTank(0,0,0,0,2,1));
-			Tanks.teamList[1].push(new AiTank(0,0,0,0,2,1));
-			Tanks.teamList[1].push(new AiTank(0,0,0,0,2,1));
+			Tanks.teamList[1].push(new AiTank(32,32,180,2,2,1));
+			Tanks.teamList[1].push(new AiTank(416,32,180,2,5,3));
+			Tanks.teamList[1].push(new AiTank(800,32,180,2,1,2));
 			Game.Logic.enemyNum -= 3;
 		}
 		if(n === 2 && (Game.Logic.enemyNum >= 2)){
-			Tanks.teamList[1].push(new AiTank(0,0,0,0,2,1));
-			Tanks.teamList[1].push(new AiTank(0,0,0,0,2,1));
+			Tanks.teamList[1].push(new AiTank(32,32,180,2,2,1));
+			Tanks.teamList[1].push(new AiTank(416,32,180,2,5,3));
 			Game.Logic.enemyNum -= 2;
 		}
 		if(n === 1 && (Game.Logic.enemyNum >= 1)){
-			Tanks.teamList[1].push(new AiTank(0,0,0,0,2,1));	
+			Tanks.teamList[1].push(new AiTank(416,32,180,2,2,1));	
 			Game.Logic.enemyNum -= 1;	
 		}
 	}else{
 		Game.Logic.enemyCounter.add();
+		console.log(1)
 	}
 
 }
