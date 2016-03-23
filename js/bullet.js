@@ -332,6 +332,7 @@ Bullet.prototype.update = function(ctx,teamNum){
 		team.forEach(function(tank){
 			var collResult = Collision.isColl(that,tank);
 			if(collResult.isColl){ 
+				Game.Music.blast.play();
 				Booms.list.push(new Boom(tank.state.x,tank.state.y,0,0,0,1));
 				if(index === 0) {
 					Game.Logic.isHero1Servive =0;
@@ -395,6 +396,7 @@ Bullet.prototype.update = function(ctx,teamNum){
 					isBoom: false
 				};
 			case 5:
+				Game.Music.blast.play();
 				that.exist = 0;
 				tile.state.frame = 6;
 				tile.remove(ctx);

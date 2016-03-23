@@ -333,7 +333,11 @@ function MyTank(x,y,rota,direction,frame,type){
 			that.moveState.d = 0;
 		})
 
-		Action.keyBind.bind('down','J',this.fire.bind(that));
+		Action.keyBind.bind('down','J',function(){
+			// console.log(that);
+			that.fire();
+			Game.Music.fire.play();
+		});
 	}
 }
 

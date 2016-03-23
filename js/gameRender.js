@@ -6,6 +6,7 @@ Game.Bullet = {};
 Game.Boom = {};
 Game.Thumbnail = {};
 Game.Logic = {};
+Game.Music = {};
 
 Game.Thumbnail.render =function(ctx){
 	ctx.save();
@@ -231,6 +232,7 @@ Game.Logic.createHero = function(){
 	if(Game.Logic.heroCounter.n()<50){
 		Game.Logic.heroCounter.add();
 	}else{
+		Game.Music.add.play();
 		//解除WASDJ的按键绑定
 		Action.keyBind.deBind('W');
 		Action.keyBind.deBind('A');
@@ -254,6 +256,7 @@ Game.Logic.createEnemy = function(){
 		var team = Tanks.teamList[1];
 		var n = 5 - team.length; 
 		if(n === 0) return;
+		Game.Music.add.play();
 		if( (n >= 3) && (Game.Logic.enemyNum >= 3) ){
 			Tanks.teamList[1].push(new AiTank(32,32,180,2,2,1));
 			Tanks.teamList[1].push(new AiTank(416,32,180,2,5,3));
@@ -271,7 +274,6 @@ Game.Logic.createEnemy = function(){
 		}
 	}else{
 		Game.Logic.enemyCounter.add();
-		console.log(1)
 	}
 
 }

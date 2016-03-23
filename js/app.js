@@ -77,6 +77,12 @@ App.main = function(){
 
 //应用准备
 App.prepare = function(tile,boom,grass,tank,buffer){
+	//音乐添加
+	Game.Music.bg = new Music('start');
+	Game.Music.fire = new Music('fire');
+	Game.Music.blast = new Music('blast');
+	Game.Music.add = new Music('add');
+	Game.Music.hit = new Music('hit');
 	//添加帧图片
 	Game.Tank.addFrames();
 	Game.Tile.addFrames();
@@ -104,6 +110,7 @@ App.prepare = function(tile,boom,grass,tank,buffer){
 App.load = new Sense(null);
 App.load.prepare = function(){
 	//初始化游戏状态
+	Game.Music.bg.play();
 	Game.Logic.initGame();
 	var that = this;
 	var width = Style.canvasWidth *0.8;
@@ -160,14 +167,17 @@ App.load.prepare = function(){
 			App.ctx.boom.clearRect(0,0,Style.canvas,Style.canvas);
 			var y = (counter.reduce() * 0.05*Style.canvas) + (0.62 *Style.canvas);
 			tankCusor.state.y = y;
+			Game.Music.fire.play();
 		})
 		Action.keyBind.bind('down','W',function(){
 			App.ctx.boom.clearRect(0,0,Style.canvas,Style.canvas);
 			var y = (counter.add() * 0.05*Style.canvas) + (0.62 *Style.canvas);
 			tankCusor.state.y = y;
+			Game.Music.fire.play();
 		})
 		Action.keyBind.bind('down','J',function(){
 			App.state = App.static.choiceMission;
+			Game.Music.hit.play();
 		})
 	}
 
@@ -221,13 +231,16 @@ App.choiceMission.prepare = function(){
 		// consoel.log('has binded')
 		Action.keyBind.bind('down','S',function(){
 			counter.reduce();	
+			Game.Music.fire.play();
 		})
 		Action.keyBind.bind('down','W',function(){
 			counter.add();
+			Game.Music.fire.play();
 		})
 		Action.keyBind.bind('down','J',function(){
 			App.state = App.static.game;
 			Game.Logic.currentMission = counter.n();
+			Game.Music.hit.play();
 		})
 	}
 	return {
@@ -239,6 +252,7 @@ App.choiceMission.prepare = function(){
 //游戏进行场景
 App.game = new Sense(null);
 App.game.prepare = function(){
+	Game.Music.bg.play();
 	//读取地图数据
 	map = readMapData(mapData[Game.Logic.currentMission]);	
 	var that = this;
